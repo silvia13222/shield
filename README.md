@@ -6,9 +6,9 @@
   * Protocolo Secure Shell - SSH
   * Levantar una maquina 
 2. [CÓDIGO COMO INFRAESTRUCTURA](#id2)
-  >1. Fabric (automatización)
-  >2. Ansible (automatización)
-  >3. Docker (virtualización)
+  >1. **Fabric** (automatización)
+  >2. **Ansible** (automatización)
+  >3. **Docker** (virtualización)
 
 
 # GESTIÓN DE LA CONFIGURACIÓN

@@ -10,7 +10,6 @@ REPO_URL = "https://github.com/silvia13222/shield.git"
 VENV_PYTHON = f'{PROJECT_PATH}/.venv/bin/python'
 VENV_PIP = f'{PROJECT_PATH}/.venv/bin/pip'
 
-
 @task  # decorador de ansible, codigo para servidor remoto
 def development(ctx):  # variables relevantes para establecer la conexion
     ctx.user = 'silvia_mb'

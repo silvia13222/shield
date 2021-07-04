@@ -11,7 +11,7 @@
   >3. **Docker** (virtualización)
 
 
-# GESTIÓN DE LA CONFIGURACIÓN
+# GESTIÓN DE LA CONFIGURACIÓN <a name="id1"></a>
 
 ## - **Pasos de instalación del proyecto** 
 En el apartado 2. del íncide quedarán recogidos en cada uno de los despliegues.
@@ -139,7 +139,7 @@ Host mi-servidor
     HostName 3.21.162.236
 ```
 
-# CÓDIGO COMO INFRAESTRUCTURA:
+# CÓDIGO COMO INFRAESTRUCTURA: <a name="id2"></a>
 
 ## 1. FABRIC
 ## Cómo desplegar el proyecto con Fabric

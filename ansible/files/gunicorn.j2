@@ -1,0 +1,8 @@
+[program:{{ supervisor_service }}]
+
+command=/usr/bin/gunicorn3 {{ wsgi_module }}:application --workers 3
+directory={{ install_root }}/{{ project_name }}
+user={{ ansible_user }}
+autostart=true
+autorestart=true
+redirect_stderr=true

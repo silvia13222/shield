@@ -6,14 +6,15 @@
   * Protocolo Secure Shell - SSH
   * Levantar una maquina 
 2. [CÓDIGO COMO INFRAESTRUCTURA](#id2)
-  1. Fabric (automatización)
-  2. Ansible (automatización)
-  3. Docker (virtualización)
+   1. Fabric (automatización)
+   2. Ansible (automatización)
+   3. Docker (virtualización)
 
 
 # GESTIÓN DE LA CONFIGURACIÓN
 
-Pasos de instalación del proyecto que en el apartado 2 quedarán recogidos en cada uno de los despliegues:
+## - **Pasos de instalación del proyecto** 
+En el apartado 2. del íncide quedarán recogidos en cada uno de los despliegues.
 1. Descargamos el proyecto del repo con git
 ```
 git clone https://github.com/silvia13222/shield.git
@@ -26,7 +27,7 @@ python3 -m venv .venv
 ```
 source .venv/bin/activate
 ```
-4. Instala las librerías del `requirements.txt`
+4. Instalamos las librerías del `requirements.txt`
 ```
 pip install -r requirements.txt
 ```
@@ -34,19 +35,19 @@ pip install -r requirements.txt
 ```
 python manage.py migrate
 ```
-6. Carga los datos de superheroes del fichero `superheroes.csv` usando el comando `metahumans/management/commands/load_from_csv.py`. Si os da problemas usando el comando load_from_csv, podéis usar el comando `loaddata` con el fichero `metahumans/fixtures/initial_data.json` 
+6. Cargamos los datos del fichero `superheroes.csv` usando el comando `metahumans/management/commands/load_from_csv.py`. En caso de que no funcionen probaremos el comando `loaddata` con el fichero `metahumans/fixtures/initial_data.json` 
 ```
 python manage.py loaddata metahumans/fixtures/initial_data.json
 ```
-7. Crea tu propio usuario superuser para poder entrar en el admin de django
+7. Creamos tu propio usuario superuser para poder entrar en el admin de django
 ```
 python manage.py createsuperuser
 ```
-8. Ejecuta el servidor de django para probar la aplicación:
+8. Ejecutamos el servidor de django para probar la aplicación:
 ```
 python manage.py runserver
 ```
-9. Configurar localhost como ip permitida para django. Editar el fichero `django_polls/settings.py`. Añadir la ip local a la variable `ALLOWED_HOSTS` (en la línea 28) de forma que quede así:
+9. Configuramos localhost como ip permitida para django. Editar el fichero `django_polls/settings.py`. Añadimos la ip local a la variable `ALLOWED_HOSTS` (en la línea 28) de forma que quede así:
 
 ```
 ALLOWED_HOSTS = ['192.168.33.10', '127.0.0.1', 'localhost']
@@ -56,9 +57,11 @@ ALLOWED_HOSTS = ['192.168.33.10', '127.0.0.1', 'localhost']
 ```
 python manage.py runserver
 ```
-## Preparar un entorno de desarrollo:
+## - **Preparar un entorno de desarrollo:**
 
-El aprovisionamiento requiere de acceso a una maquina remota con sistema operativo Ubuntu (ya sea una máquina vagrant o un servidor de AWS). Para ello tendremos que configurar si aun no lo tenemos un puerto y un usuario.
+El aprovisionamiento requiere de acceso a una maquina remota con sistema operativo Ubuntu (ya sea una máquina vagrant o un servidor de AWS). 
+
+-> **Si ya tienes configurado el acceso a una maquina salta a 2. CÓDIGO COMO INFRAESTRUCTURA.**
 ### Protocolo Secure Shell - SSH
 
 Protocolo cuya principal función es el acceso remoto a un servidor por medio de un canal seguro en el que toda la información está cifrada.
@@ -79,7 +82,7 @@ $ sudo dpkg -i vagrant_2.2.14_x86_64.deb
 2. Instalar VirtualBox a partir de las instrucciones de su web:
 https://www.virtualbox.org/wiki/Linux_Downloads
 
-**SI UTILIZAS SISTEMAS WINDOWS CON WSL**
+    SI UTILIZAS SISTEMAS WINDOWS CON WSL
 
 3. Añade al fichero ~/.bashrc la siguiente línea, al final del todo, para configurar la integración con windows:
 ```
@@ -160,8 +163,9 @@ def development(ctx):
 **4.** Ejecuta el script, dentro de la carpeta shield:
 ```
 fab development deploy
-fab production deploy
+
 ```
+.
 ### Descripción del proceso de instalación del proyecto en una máquina remota con Fabric, estos cambios se encuentran ya reflejados en el script:
 
 1. Activamos el entorno virtual:
@@ -188,7 +192,7 @@ def deploy(ctx):
         conn.run("uname")
         conn.run("ls")
 ```
-4. Comprobammos que no aparezcan errores:
+4. Comprobamos que no aparezcan errores:
 ```
 fab development deploy
 ```
@@ -223,7 +227,7 @@ def deploy(ctx):
     if conn is None:
         sys.exit("Failed to get connection")
 ```
-8. Comprobammos que no aparezcan errores:
+8. Comprobamos que no aparezcan errores:
 ```
 fab development deploy
 ```
@@ -241,29 +245,151 @@ fab development deploy
 ## Cómo desplegar una aplicación Django con Ansible
 
 
-1. Instala Ansible en el sistema operativo  
+**1.** Instala Ansible en el sistema operativo  
 https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html
 
-2. Instala la librería de Ansible desde el repositorio de PIP
+**2.** Instala la librería de Ansible desde el repositorio de PIP
 ```
 pip install ansible
 ```
 
-3. Comprueba la configuración de variables del fichero `ansible/vars.yml` y ajusta las que necesites
+**3.** Comprueba la configuración de variables del fichero `ansible/vars.yml` y ajusta las que necesites
 
-4. Ejecuta el script con el siguiente comando
+**4.** Ejecuta el script con el siguiente comando
 ```
 cd ansible  # solo si estas en otra carpeta en la terminal
 ansible-playbook -i hosts provision.yml --user=vagrant --ask-pass
 ```
+.
+### Descripción del proceso de instalación del proyecto en una máquina remota con Fabric, estos cambios se encuentran ya reflejados en el script::
+Tenemos que tener en cuanta que la complejidad de Ansible es mayor que la de Fabric, requerirá de un fichero para cada función a realizar.
+1. Instalamos ansible (terminal de ubuntu):
+```
+sudo apt update
+sudo apt install software-properties-common
+sudo apt-add-repository --yes --update ppa:ansible/ansible
+sudo apt install ansible
+pip install ansible
+```
+* Para comprobar que se ha instalado correctamente (nos devuelve un pong):
+```
+ansible localhost -m ping --ask-pass
+```
+* Vemos que la lista de hosts está vacía:
+```
+ansible --list-hosts all
+```
 
+Para la creación de ficheros, el mejor método es buscar en la documentación oficial las plantillas: https://docs.ansible.com/ansible/latest/user_guide/index.html
+
+2. Creamos el fichero hosts, incluimos la direccion del servidor que vamos a usar, y el interprete.
+```
+[servers]
+0.0.0.0 ansible_python_interpreter=/usr/bin/python3
+```
+3. Creamos un fichero de variables que se llama vars.yml (archivo YAML). En él incluiremos todas las variables a las que vamos a llamar: el nombre del proyecto, la ruta de instalación, ruta del repositorio, ruta de carga de datos, los packetes del sistema etc...
+```
+---
+# a unix path-friendly name (IE, no spaces or special characters)
+project_name: shield
+
+# the base path to install to. You should not need to change this.
+install_root: /ansible
+
+
+wsgi_module: shield.wsgi
+
+```
+El clonado del repositorio debe de con protocolo SSH
+```
+# the git repository URL for the project
+project_repo: git@github.com:silvia13222/shield.git
+```
+4. Creamos un fichero de aprovisionamiento que se llama provision.yml (archivo YAML). 
+* La cabecera describe del siguiente modo: dónde ejecutarse, variables a utilizar, gather_facts y ejecutarse o no como superusuario:
+```
+---
+- hosts: servers
+  vars_files:
+    - vars.yml
+  gather_facts: false
+  become: yes
+```
+
+* Añadimos las tareas a realizar:
+
+*ejemplo:* Instalar los paquetes del sistema
+
+```
+---
+- hosts: servers
+  vars_files:
+    - vars.yml
+  gather_facts: false
+  become: yes
+
+  tasks:
+    - name: Install system packages
+      apt:
+        name: "{{ system_packages }}"
+        update_cache: true
+
+#listado de tareas
+```
+4. Creamos un fichero para realizar tareas concretas que se llama deploy.yml (archivo YAML). 
+
+
+Utiliza la misma cabecera que provision.yml
+* Clonaremos el repositorio desde github
+```
+  tasks:
+    - name: Clone/pull project repo
+      git:
+        repo: "{{ project_repo }}"
+        dest: "{{ install_root }}/{{ project_name }}"
+        accept_hostkey: yes
+        force: yes
+      notify:
+      - restart gunicorn
+```
+* Instalaremos el módulo de dependencias
+```
+    - name: Install python packages
+      pip:
+        requirements: "{{ install_root }}/{{ project_name }}/requirements.txt"
+      notify:
+      - restart gunicorn
+```
+* Del mismo modo añadimos todas las tareas.
+
+
+Sin olvidarnos de añadir al archivo provision.yml:
+```
+- import_playbook: deploy.yml
+```
+5. Ejecuta el script dentro de la carpeta ansible y comprobar si funciona.
+```
+cd ansible  # solo si estas en otra carpeta en la terminal
+ansible-playbook -i hosts provision.yml --user=vagrant --ask-pass
+```
+6. Por último creamos una carpeta llamada files y que incluya los ficheros que vamos a copiar en el servidor.(archivos .j2 extensión genérica)
+```
+[program:{{ supervisor_service }}]
+
+command=/usr/bin/gunicorn3 {{ wsgi_module }}:application --workers 3
+directory={{ install_root }}/{{ project_name }}
+user={{ ansible_user }}
+autostart=true
+autorestart=true
+redirect_stderr=true
+```
 
 
 ## 3. DOCKER
 
 A diferencia de Fabric y Ansible, Docker copia desde la base de datos ordenador la aplicación, por ello en primer lugar tendremos que asegurarnos del correcto funcionamiento de la misma.
 
-1. En el caso de no haberlo hecho, realizamos los pasos mencionados anteriormente:
+**1.** En el caso de no haberlo hecho, realizamos los pasos mencionados anteriormente:
 ```
 git clone https://github.com/silvia13222/shield.git  # clonado del repositorio
 python3 -m venv .venv  # creación de entorno virtual
@@ -272,12 +398,12 @@ pip install -r requirements.txt  # instala las librerías
 python manage.py migrate  # ejecuta las migraciones
 python manage.py loaddata metahumans/fixtures/initial_data.json  # carga los datos
 ```
-2. Comprobamos que la aplicación funciona:
+**2.** Comprobamos que la aplicación funciona:
 ```
 python manage.py runserver 
 curl http://127.0.0.1:8000/
 ```
-3.  Crea un fichero llamado Dockerfile en la raíz del proyecto:
+**3.**  Creamos un fichero llamado Dockerfile en la raíz del proyecto, con este contenido:
 ```
 # syntax=docker/dockerfile:1
 
@@ -295,7 +421,7 @@ CMD [ "python3", "manage.py" , "runserver" , "0.0.0.0:8000"]
 *Opcional:*
 También podríamos añadir un archivo .dockerignore, en el caso de necesitar que Docker ignore algún fichero.
 
-4. Para construir la imagen a partir del fichero que acabas de crear, ejecuta el siguiente comando en la consola:
+**4.** Construimos la imagen a partir del fichero que acabamos de crear, ejecutamos el siguiente comando en la consola:
 ```
 docker build .
 ```
@@ -303,19 +429,19 @@ Si queremos ponerle nombre a la imagen:
 ```
 docker build . --tag shield
 ```
-5. Para ver las imágenes que están generadas en tu máquina, puedes ejecutar el siguiente comando:
+**5.** Para ver las imágenes que están generadas en tu máquina, puedes ejecutar el siguiente comando:
 ```
 docker images
 ```
-6. Para lanzar el contenedor a partir de la imagen que acabamos de crear:
+**6.** Para lanzar el contenedor a partir de la imagen que acabamos de crear:
 ```
 docker run shield
 ```
-7. La comprobación de que la aplicación funciona debe realizarse con el parámetro --publish, ya que en un entorno aislado y fuera de la red local no será visible en el navegador:
+**7.** La comprobación de que la aplicación funciona debe realizarse con el parámetro --publish, ya que en un entorno aislado y fuera de la red local no será visible en el navegador:
 ```
 docker run --publish 8000:8000 shield
 ```
-8. Otros comandos de Docker:
+**8.** Otros comandos de Docker:
 + Para arrancar en segundo plano la applicación con el siguiente comando:
 ```
 docker run -d -p 8000:8000 python-docker

@@ -6,9 +6,9 @@
   * Protocolo Secure Shell - SSH
   * Levantar una maquina 
 2. [CÓDIGO COMO INFRAESTRUCTURA](#id2)
-   1. Fabric (automatización)
-   2. Ansible (automatización)
-   3. Docker (virtualización)
+  >1. Fabric (automatización)
+  >2. Ansible (automatización)
+  >3. Docker (virtualización)
 
 
 # GESTIÓN DE LA CONFIGURACIÓN
@@ -152,6 +152,7 @@ pip install fabric
 sudo apt install fabric
 ```
 **2.** Asegúrese de que el nombre de la aplicación en PROJECT_NAME y la url del repositorio REPO_URL son correctos en la linea 7 y 9 del fabfile.py
+
 **3.** Cambie sus credenciales para que coincidan con su servidor remoto, y comprueba así la ip del servidor remoto y las credenciales en las línea 14-17 del script fabfile.py
 ```
 @task
